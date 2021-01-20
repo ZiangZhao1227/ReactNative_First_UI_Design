@@ -10,57 +10,83 @@ import {
   Image,
 } from "react-native";
 import { Menu, Settings } from "react-native-feather";
+import { SocialIcon, SearchBar } from "react-native-elements";
 
-const App = () => {
-  return (
-    <View style={styles.container}>
-      <View>
-        <ImageBackground
-          source={require("./assets/dog-and-cat.jpg")}
-          style={styles.bgImage}
-        ></ImageBackground>
-        <Menu stroke="black" strokeWidth={3} width={32} height={32} style={styles.menu} />
-        <Settings
-          stroke="black"
-          strokeWidth={3}
-          width={32}
-          height={32}
-          style={styles.settings}
+export default class App extends React.Component {     
+  state = {
+    search: "",
+  };
+
+  updateSearch = (search) => {
+    this.setState({ search });
+  };
+
+  render() {
+    const { search } = this.state;
+    return (
+      <View style={styles.container}>
+        <View>
+          <ImageBackground
+            source={require("./assets/dog-and-cat.jpg")}
+            style={styles.bgImage}
+          ></ImageBackground>
+
+          <Menu
+            stroke="black"
+            strokeWidth={3}
+            width={32}
+            height={32}
+            style={styles.menu}
+          />
+          <Settings
+            stroke="black"
+            strokeWidth={3}
+            width={32}
+            height={32}
+            style={styles.settings}
+          />
+
+          <Text style={styles.hello}>Get your own Cat&Dog</Text>
+        </View>
+
+        <SearchBar
+          placeholder="Type Here..."
+          onChangeText={this.updateSearch}
+          value={search}
         />
 
-        <Text style={styles.hello}>Get your own Cat&Dog</Text>
+        <View style={styles.infoArea}>
+          <FlatList
+            data={mediaArray}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity style={styles.row}>
+                  <Image
+                    style={styles.list_img}
+                    source={{ uri: item.thumbnails.w160 }}
+                  />
+                  <View>
+                    <SocialIcon raised={false} type="twitter" />
+                    <SocialIcon raised={false} type="youtube" />
+                    <SocialIcon raised={false} type="facebook" />
+                  </View>
+                  <View style={styles.textbox}>
+                    <Text style={styles.listTitle}>{item.title}</Text>
+                    <Text style={styles.fontbox}>{item.description}</Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>
+        <View style={styles.footerArea}>
+          <Text style={styles.footerText}>Author: Ziang Zhao</Text>
+        </View>
+        <StatusBar backgroundColor="mediumvioletred" barStyle="light-content" />
       </View>
-
-      <View style={styles.infoArea}>
-        <FlatList
-          data={mediaArray}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity style={styles.row}>
-                <Image
-                  style={styles.list_img}
-                  source={{ uri: item.thumbnails.w160 }}
-                />
-                <View style={styles.textbox}>
-                  <Text style={styles.listTitle}>{item.title}</Text>
-                  <Text style={styles.fontbox}>{item.description}</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      </View>
-
-      <View style={styles.footerArea}>
-        <Text style={styles.footerText}>Author: Ziang Zhao</Text>
-      </View>
-
-      <StatusBar backgroundColor="mediumvioletred" barStyle="light-content" />
-    </View>
-  );
-};
-
-export default App;
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
